@@ -25,7 +25,13 @@ def format_k_wildcards(k,wl):
             print("\t(OUT) \t%s, %s %s, %s" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time))
 
 
-def merge_hyfiles(hyfiles):
+def merge_hyfiles():
+    #<input type="hidden" id="hid1" value="generatedValue1" />
+    #<input type="hidden" id="hid2" value="generatedValue2" />
+    hid1 = document.querySelector("#hid1")
+    val1 = hid1.innerText;
+    hid1 = document.querySelector("#hid2")
+    val2 = hid2.innerText;
     output_div = document.querySelector("#output")
     output_div.innerText = repr(hyfiles)
     return
