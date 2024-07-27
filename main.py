@@ -26,6 +26,9 @@ def format_k_wildcards(k,wl):
 
 
 def merge_hyfiles(hyfiles):
+    output_div = document.querySelector("#output")
+    output_div.innerText = repr(hyfiles)
+    return
     d = {}
     for hyfile in hyfiles:
         hf = hytek_parser.parse_hy3(hyfile)
@@ -49,8 +52,3 @@ def merge_hyfiles(hyfiles):
             format_k_wildcards(NUM_WILDCARDS, d[i]['wildcard_pool'])
 
 
-def translate_english(event):
-    input_text = document.querySelector("#english")
-    english = input_text.value
-    output_div = document.querySelector("#output")
-    output_div.innerText = english + ", yeah!"
