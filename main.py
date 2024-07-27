@@ -25,7 +25,7 @@ def format_k_wildcards(k,wl):
             print("\t(OUT) \t%s, %s %s, %s" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time))
 
 
-def merge_hyfiles():
+def merge_hyfiles(the_arg):
     #<input type="hidden" id="hid1" value="generatedValue1" />
     #<input type="hidden" id="hid2" value="generatedValue2" />
     hid1 = document.querySelector("#hid1")
