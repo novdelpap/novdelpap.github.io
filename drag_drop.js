@@ -58,7 +58,8 @@ function updateProgress(fileNumber, percent) {
 }
 
 function handleFiles(files) {
-  files = [...files]
+    files = [...files]
+    merge_hyfiles(files)
   initializeProgress(files.length)
   files.forEach(uploadFile)
   files.forEach(previewFile)
