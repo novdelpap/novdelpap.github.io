@@ -1,1 +1,18 @@
-hello, world
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <title>Sundance Merge Tool</title>
+      <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+      <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+  </head>
+  <body>
+    <h1>Sundance Merge Tool</h1>
+    <p>Transform district outputs into draft championship program...</p>
+    <input type="text" id="english" placeholder="Type English here..." />
+    <button py-click="translate_english">Translate</button>
+    <div id="output"></div>
+    <script type="py" src="./main.py" config="./pyscript.json"></script>
+  </body>
+</html>
