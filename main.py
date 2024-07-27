@@ -1,9 +1,6 @@
 import hytek_parser
 from pyscript import document
 
-import hytek_parser
-import sys
-
 VERBOSE = True
 NUM_AUTO = 3
 NUM_WILDCARDS = 7
@@ -28,7 +25,7 @@ def format_k_wildcards(k,wl):
             print("\t(OUT) \t%s, %s %s, %s" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time))
 
 
-def merge_hyfiles(hyfiles)
+def merge_hyfiles(hyfiles):
     d = {}
     for hyfile in hyfiles:
         hf = hytek_parser.parse_hy3(hyfile)
