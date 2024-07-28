@@ -44,7 +44,7 @@ async def merge_hyfiles(the_arg):
     hy3_file = BytesIO(file_bytes) # Wrap in Python BytesIO file-like object
 
     d = {}
-    for hyfile in [hy_3file]:
+    for hyfile in [hy3_file]:
      with open("a.zip", "wb") as f: # use `wb` mode
         f.write(mf.getvalue())
         hf = hytek_parser.parse_hy3(f)
