@@ -51,7 +51,7 @@ async def merge_hyfiles(the_arg):
                 f.write(line)
         hf = hytek_parser.parse_hy3("a.hy3")
         output_div.innerText = dir(hf)
-        output_div.innerTest += " :: %d" % cnt
+        output_div.innerText += " :: %d" % cnt
         output_div.innerText += " -- " + str(hf.__attrs_attrs__)
         for event_key in hf.meet.events.keys():
             event_record = hf.meet.events[event_key]
