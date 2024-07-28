@@ -41,11 +41,13 @@ async def merge_hyfiles(the_arg):
     hy3_file = document.getElementById('fileElem').files.item(0)
     array_buf = await hy3_file.arrayBuffer() # Get arrayBuffer from file
     file_bytes = array_buf.to_bytes() # convert to raw bytes array 
-    #hy3_file = BytesIO(file_bytes) # Wrap in Python BytesIO file-like object
+    hy3_file = BytesIO(file_bytes) # Wrap in Python BytesIO file-like object
 
     d = {}
-    for hyfile in [file_bytes]:
-        hf = hytek_parser.parse_hy3(hyfile)
+    for hyfile in [hy_3file]:
+     with open("a.zip", "wb") as f: # use `wb` mode
+        f.write(mf.getvalue())
+        hf = hytek_parser.parse_hy3(f)
         for event_key in hf.meet.events.keys():
             event_record = hf.meet.events[event_key]
             if event_key not in d:
