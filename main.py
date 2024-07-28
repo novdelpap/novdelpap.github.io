@@ -38,7 +38,7 @@ def merge_hyfiles(the_arg):
     output_div = document.querySelector("#output")
     output_div.innerText = repr(the_arg) + "/" + repr(val1) + "/" + repr(val2)
     
-    hy3_file = document.getElementById('upload').files.item(0)
+    hy3_file = document.getElementById('fileElem').files.item(0)
     array_buf = await hy3_file.arrayBuffer() # Get arrayBuffer from file
     file_bytes = array_buf.to_bytes() # convert to raw bytes array 
     hy3_file = BytesIO(file_bytes) # Wrap in Python BytesIO file-like object
