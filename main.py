@@ -33,7 +33,7 @@ def merge_hyfiles(the_arg):
     hid2 = document.querySelector("#hid2")
     val2 = hid2.innerText;
     output_div = document.querySelector("#output")
-    output_div.innerText = repr(hyfiles)
+    output_div.innerText = repr(the_arg) + "/" + repr(val1) + "/" + repr(val2)
     return
     d = {}
     for hyfile in hyfiles:
