@@ -29,9 +29,11 @@ def merge_hyfiles(the_arg):
     #<input type="hidden" id="hid1" value="generatedValue1" />
     #<input type="hidden" id="hid2" value="generatedValue2" />
     hid1 = document.querySelector("#hid1")
-    val1 = hid1.val();
+    val1 = hid1.value;
+    hid1.value = "blah1"
     hid2 = document.querySelector("#hid2")
-    val2 = hid2.val();
+    hid2.value = "blah2"
+    val2 = hid2.value;
     output_div = document.querySelector("#output")
     output_div.innerText = repr(the_arg) + "/" + repr(val1) + "/" + repr(val2)
     return
