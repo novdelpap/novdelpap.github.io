@@ -26,7 +26,7 @@ def format_k_wildcards(k,wl):
             print("\t(OUT) \t%s, %s %s, %s" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time))
 
 
-def merge_hyfiles(the_arg):
+async def merge_hyfiles(the_arg):
     #<input type="hidden" id="hid1" value="generatedValue1" />
     #<input type="hidden" id="hid2" value="generatedValue2" />
     hid1 = document.querySelector("#hid1")
@@ -39,7 +39,7 @@ def merge_hyfiles(the_arg):
     output_div.innerText = repr(the_arg) + "/" + repr(val1) + "/" + repr(val2)
     
     hy3_file = document.getElementById('fileElem').files.item(0)
-    array_buf = hy3_file.arrayBuffer() # Get arrayBuffer from file
+    array_buf = await hy3_file.arrayBuffer() # Get arrayBuffer from file
     file_bytes = array_buf.to_bytes() # convert to raw bytes array 
     hy3_file = BytesIO(file_bytes) # Wrap in Python BytesIO file-like object
 
