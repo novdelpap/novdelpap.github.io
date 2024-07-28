@@ -45,7 +45,7 @@ async def merge_hyfiles(the_arg):
 
     d = {}
     for hyfile in [hy3_file]:
-        with open("a.zip", "wb") as f: # use `wb` mode
+        with open("a.zip", "w") as f: # use `wb` mode
            f.write(hyfile.getvalue())
         hf = hytek_parser.parse_hy3("a.zip")
         for event_key in hf.meet.events.keys():
