@@ -44,12 +44,15 @@ async def merge_hyfiles(the_arg):
 
     d = {}
     for hyfile in [hy3_file]:
+        cnt = 0
         with open("a.hy3", "w") as f: # use `wb` mode
             for line in hy3_file.readlines():
+                cnt += 1
                 f.write(line)
         hf = hytek_parser.parse_hy3("a.hy3")
         output_div.innerText = dir(hf)
         output_div.innerText += " -- " + str(hf.__attrs_attrs__)
+        output_div.innerTest += " :: %d" % cnt
         for event_key in hf.meet.events.keys():
             event_record = hf.meet.events[event_key]
             if event_key not in d:
