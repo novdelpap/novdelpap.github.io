@@ -10,10 +10,12 @@ NUM_AUTO = 3
 NUM_WILDCARDS = 7
 
 def format_auto_quals(aq):
+    rvs = ""
     saq = sorted(aq, key=lambda x: x.converted_seed_time)
-    print("\tAUTOMATIC QUALIFIERS")
+    rvs += "\tAUTOMATIC QUALIFIERS\n"
     for entry in saq:
-        print("\t(AUTO) %s, %s %s (%s) %s [%s]" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.swimmers[0].team_code, entry.converted_seed_time, entry.converted_seed_time_course))
+        rvs += "\t(AUTO) %s, %s %s (%s) %s [%s]\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.swimmers[0].team_code, entry.converted_seed_time, entry.converted_seed_time_course))
+     return rvs
 
 def format_k_wildcards(k,wl):
     fwl = filter(lambda x: type(x.converted_seed_time) == float, wl)
@@ -54,8 +56,6 @@ async def merge_hyfiles(the_arg):
         with open("a.hy3", "rb") as ff:
              output_div.innerText += str(hashlib.file_digest(ff, 'md5').hexdigest())
         hf = hytek_parser.parse_hy3("a.hy3")
-        with open("a.hy3", "rb") as fff:
-             output_div.innerText += str(hashlib.file_digest(fff, 'md5').hexdigest())
         for event_key in hf.meet.events.keys():
             event_record = hf.meet.events[event_key]
             if event_key not in d:
@@ -72,7 +72,7 @@ async def merge_hyfiles(the_arg):
             print("===race %s: no racers" % (i))
         else:
             print("===race %s (%s-%s %s %s meters %s): " % (i, d[i]['age_min'], d[i]['age_max'], d[i]['event_gender'], d[i]['distance'], d[i]['stroke']))
-            format_auto_quals(d[i]['auto_qual'])
+            output_div.innerText += format_auto_quals(d[i]['auto_qual'])
             format_k_wildcards(NUM_WILDCARDS, d[i]['wildcard_pool'])
 
 
