@@ -1,6 +1,7 @@
 import hytek_parser
 from pyscript import document
 from io import StringIO
+import hashlib
 
 VERBOSE = True
 NUM_AUTO = 3
@@ -44,12 +45,10 @@ async def merge_hyfiles(the_arg):
 
     d = {}
     for hyfile in [hy3_file]:
-        cnt = 0
         output_div.innerText = ""
         with open("a.hy3", "w") as f: # use `wb` mode
+            output_div.innerText += str(hashlib.file_digest(f, 'md5').hexdigest())
             for line in hy3_file.readlines():
-                cnt += 1
-                output_div.innerText += line
                 f.write(line)
         hf = hytek_parser.parse_hy3("a.hy3")
         for event_key in hf.meet.events.keys():
