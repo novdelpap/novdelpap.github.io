@@ -1,4 +1,5 @@
 import hytek_parser
+import attrs
 from pyscript import document
 from io import StringIO
 from io import BytesIO
