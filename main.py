@@ -14,7 +14,7 @@ def format_auto_quals(aq):
     saq = sorted(aq, key=lambda x: x.converted_seed_time)
     rvs += "\tAUTOMATIC QUALIFIERS\n"
     for entry in saq:
-        rvs += "\t(AUTO) %s, %s %s (%s) %s [%s]\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.swimmers[0].team_code, entry.converted_seed_time, entry.converted_seed_time_course))
+        rvs += "\t(AUTO) %s, %s %s (%s) %s [%s]\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.swimmers[0].team_code, entry.converted_seed_time, entry.converted_seed_time_course)
      return rvs
 
 def format_k_wildcards(k,wl):
