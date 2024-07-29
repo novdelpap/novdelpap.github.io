@@ -60,6 +60,7 @@ function loadFile(file) {
 	div.appendChild(p_md5)
 	let hidden_file = document.createElement('hidden')
 	hidden_file.value = reader.result
+	div.appendChild(hidden_file)
 	document.getElementById('files').appendChild(div)
 	console.log("loaded file into browser")
   }
