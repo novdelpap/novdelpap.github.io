@@ -14,20 +14,17 @@
   <body>
     <h1>Merge Tool</h1>
     <p>Transform district outputs into draft championship program...</p>
-        
+    
     <div id="drop-area">
       <form class="my-form">
 	<p>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region</p>
 	<input type="file" id="fileElem" multiple accept=".hy3" onchange="handleFiles(this.files)">
 	<label class="button" for="fileElem">Select some files</label>
       </form>
-      <progress id="progress-bar" max=100 value=0></progress>
-      <div id="gallery" /></div>
+      <div id="files" /></div>
     <button py-click="merge_hyfiles">Generate Sundance!</button>
     <div id="output"></div>
-    <input type="hidden" id="hid1" value="generatedValue1">Inner1:-)</>
-    <input type="hidden" id="hid2" value="generatedValue2">Inner2:-(</>
-</div>
+    </div>
 
     <label class="button" py-click="merge_hyfiles">Generate :-)</label>
 

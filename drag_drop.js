@@ -33,36 +33,35 @@ function unhighlight(e) {
 }
 
 function handleDrop(e) {
-  var dt = e.dataTransfer
-  var files = dt.files
-
-  handleFiles(files)
+    var dt = e.dataTransfer
+    var files = dt.files
+    
+    handleFiles(files)
 }
 
 function handleFiles(files) {
     files = [...files]
     console.log("handle files")
     console.log(files)
-  files.forEach(previewFile)
+    files.forEach(loadFile)
 }
 
-function previewFile(file) {
-    console.log("preview file")
-    console.log(file)
-  let reader = new FileReader()
-  reader.readAsBinaryString(file)
+function loadFile(file) {
+    console.log("load file into browser")
+    let reader = new FileReader()
+    reader.readAsBinaryString(file)
     reader.onloadend = function() {
-	console.log("onloadend")
-	let p = document.createElement('p')
-	console.log("created p")
-      //img.src = reader.result
-	p.innerText = file
-	console.log("added " + file + " to p")
-	p.innerText += " "
-	p.innerText += CryptoJS.MD5(reader.result)
-	console.log("added md5, now: " + p.innerText)
-	document.getElementById('gallery').appendChild(p)
-	console.log("gallery should now have " + document.getElementById('gallery').length + " children")
+	let div = document.createElement('div')
+	let p_name = document.createElement('p')
+	p_name.innerText = file.name
+	div.appendChild(p_name)
+	let p_md5 = document.createElement('p')
+	p_md5.innerText = CryptoJS.MD5(reader.result)
+	div.appendChild(p_md5)
+	let hidden_file = document.createElement('hidden')
+	hidden_file.value = reader.result.text()
+	document.getElementById('files').appendChild(div)
+	console.log("loaded file into browser")
   }
 }
 
