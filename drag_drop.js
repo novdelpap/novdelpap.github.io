@@ -59,7 +59,7 @@ function loadFile(file) {
 	p_md5.innerText = CryptoJS.MD5(reader.result)
 	div.appendChild(p_md5)
 	let hidden_file = document.createElement('hidden')
-	hidden_file.value = reader.result.text()
+	hidden_file.value = reader.result
 	document.getElementById('files').appendChild(div)
 	console.log("loaded file into browser")
   }
