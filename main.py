@@ -18,33 +18,39 @@ def format_auto_quals(aq):
     return rvs
 
 def format_k_wildcards(k,wl):
+    rvs = ""
     fwl = filter(lambda x: type(x.converted_seed_time) == float, wl)
     swl = sorted(fwl, key=lambda x: x.converted_seed_time)
-    print("\t%d WILDCARDS" % k)
+    rvs += "\t%d WILDCARDS\n" % k
     for entry in swl[:NUM_WILDCARDS]:
-        print("\t(WILDCARD) %s, %s %s, %s, [%s]" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, entry.converted_seed_time_course))
+        rvs += "\t(WILDCARD) %s, %s %s, %s, [%s]\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, entry.converted_seed_time_course)
     if VERBOSE:
         dropped = filter(lambda x: not (type(x.converted_seed_time) == float), wl)
         for entry in swl[NUM_WILDCARDS:]:
-            print("\t(OUT) \t%s, %s %s, %s" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time))
+            rvs += "\t(OUT) \t%s, %s %s, %s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time)
         for entry in dropped:
-            print("\t(OUT) \t%s, %s %s, %s" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time))
+            rvs += "\t(OUT) \t%s, %s %s, %s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time)
+    return rvs
 
+def merge_hyfiles(the_arg):
 
-async def merge_hyfiles(the_arg):    
-    hy3_file = document.getElementById('fileElem').files.item(0)
-    file_text = await hy3_file.text() # Get arrayBuffer from file
-    hy3_file = StringIO(file_text) # Wrap in Python BytesIO file-like object
-
+    files_div = document.getElementById('files')
+    output_div = document.getElementById('output')
+    output_div.innerText = "Calculating merge, standby... (todo: progress bar)"
+    
     d = {}
-    for hyfile in [hy3_file]:
-        output_div.innerText = ""
-        with open("a.hy3", "w") as f: 
+    rvs = ""
+    
+    for filenum in range(files_div.children.length):
+        file_div = files_div.children.item(filenum)
+        file_name = file_div.children.item(0).innerText
+
+        file_contents = file_div.children.item(2).value
+        hy3_file = StringIO(file_contents) 
+        with open(file_name, "w") as f: 
             for line in hy3_file.readlines():
                 f.write(line)
-        with open("a.hy3", "rb") as ff:
-             output_div.innerText += str(hashlib.file_digest(ff, 'md5').hexdigest())
-        hf = hytek_parser.parse_hy3("a.hy3")
+        hf = hytek_parser.parse_hy3(file_name)
         for event_key in hf.meet.events.keys():
             event_record = hf.meet.events[event_key]
             if event_key not in d:
@@ -58,10 +64,11 @@ async def merge_hyfiles(the_arg):
 
     for i in range(1,81):
         if i not in d:
-            print("===race %s: no racers" % (i))
+            rvs += "===race %s: no racers\n" % (i)
         else:
-            print("===race %s (%s-%s %s %s meters %s): " % (i, d[i]['age_min'], d[i]['age_max'], d[i]['event_gender'], d[i]['distance'], d[i]['stroke']))
-            output_div.innerText += format_auto_quals(d[i]['auto_qual'])
-            format_k_wildcards(NUM_WILDCARDS, d[i]['wildcard_pool'])
+            rvs += "===race %s (%s-%s %s %s meters %s): \n" % (i, d[i]['age_min'], d[i]['age_max'], d[i]['event_gender'], d[i]['distance'], d[i]['stroke'])
+            rvs += format_auto_quals(d[i]['auto_qual'])
+            rvs += format_k_wildcards(NUM_WILDCARDS, d[i]['wildcard_pool'])
 
+    output_div.innerText = rvs
 
