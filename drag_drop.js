@@ -34,8 +34,9 @@ function unhighlight(e) {
 
 function handleDrop(e) {
     var dt = e.dataTransfer
+    console.log("what is this e.dataTransfer? " + e.dataTransfer)
     var files = dt.files
-    
+    console.log("handling drop, dt.files has length: " + dt.files.length)
     handleFiles(files)
 }
 
@@ -47,7 +48,6 @@ function handleFiles(files) {
 }
 
 function loadFile(file) {
-    console.log("load file into browser")
     let reader = new FileReader()
     reader.readAsBinaryString(file)
     reader.onloadend = function() {
@@ -60,13 +60,9 @@ function loadFile(file) {
 	div.appendChild(p_md5)
 	let hidden_file = document.createElement('hidden')
 	hidden_file.id = "file_contents"
-	hidden_file.value = file.name//reader.result
-	console.log("does this still have content?")
-	console.log(reader.result)
-	console.log("maybe?")
+	hidden_file.value = reader.result
 	div.appendChild(hidden_file)
 	document.getElementById('files').appendChild(div)
-	console.log("loaded file into browser")
   }
 }
 
