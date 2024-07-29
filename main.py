@@ -1,6 +1,7 @@
 import hytek_parser
 from pyscript import document
 from io import StringIO
+from io import BytesIO
 import hashlib
 
 VERBOSE = True
@@ -41,12 +42,12 @@ async def merge_hyfiles(the_arg):
     
     hy3_file = document.getElementById('fileElem').files.item(0)
     file_text = await hy3_file.text() # Get arrayBuffer from file
-    hy3_file = StringIO(file_text) # Wrap in Python BytesIO file-like object
+    hy3_file = BytesIO(file_text) # Wrap in Python BytesIO file-like object
 
     d = {}
     for hyfile in [hy3_file]:
         output_div.innerText = ""
-        with open("a.hy3", "w") as f: # use `wb` mode
+        with open("a.hy3", "wb") as f: # use `wb` mode
             for line in hy3_file.readlines():
                 f.write(line)
         with open("a.hy3", "rb") as f:
