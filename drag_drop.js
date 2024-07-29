@@ -42,8 +42,7 @@ function handleDrop(e) {
 
 function handleFiles(files) {
     files = [...files]
-    console.log("handle files")
-    console.log(files)
+    console.log("handle " + files.length + " files")
     files.forEach(loadFile)
 }
 
@@ -63,6 +62,7 @@ function loadFile(file) {
 	hidden_file.value = reader.result
 	div.appendChild(hidden_file)
 	document.getElementById('files').appendChild(div)
+	console.log("file " + file.name + " is loaded")
   }
 }
 
