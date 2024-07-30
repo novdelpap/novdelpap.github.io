@@ -1,8 +1,10 @@
 import hytek_parser
 import attrs
 from pyscript import document
+from js import Uint8Array
 from io import StringIO
 from io import BytesIO
+import zipfile
 import hashlib
 
 VERBOSE = True
@@ -32,6 +34,8 @@ def format_k_wildcards(k,wl):
             rvs += "\t(OUT) \t%s, %s %s, %s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time)
     return rvs
 
+#TODO, warn if there are more than three files
+#TODO, more gracefully handle bad zip
 def merge_hyfiles(the_arg):
 
     files_div = document.getElementById('files')
@@ -44,12 +48,32 @@ def merge_hyfiles(the_arg):
     for filenum in range(files_div.children.length):
         file_div = files_div.children.item(filenum)
         file_name = file_div.children.item(0).innerText
-
+        
         file_contents = file_div.children.item(2).value
-        hy3_file = StringIO(file_contents) 
-        with open(file_name, "w") as f: 
-            for line in hy3_file.readlines():
-                f.write(line)
+        
+        if file_name[-4:].lower() == '.zip':
+            ba = Uint8Array.new(file_contents)
+            hy3_file = BytesIO(bytearray(ba))
+            with open(file_name, "wb") as f:
+                for line in hy3_file.readlines():
+                    f.write(line)
+            z = zipfile.ZipFile(file_name)
+            if len(z.filelist) > 1:
+                print('bailing, [%s] had more than one file' % file_name)
+                return
+            if not (z.filelist[0].filename[-4:].lower() == '.hy3'):
+                print('bailing, the first file in [%s] is not a .hy3' % file_name)
+                return
+            z.extractall()
+            file_name = z.filelist[0].filename
+            
+        elif file_name[-4:].lower() == '.hy3':
+            hy3_file = StringIO(file_contents) 
+            with open(file_name, "w") as f: 
+                for line in hy3_file.readlines():
+                    f.write(line)
+
+        rvs += "processing file [%s]\n" % file_name 
         hf = hytek_parser.parse_hy3(file_name)
         for event_key in hf.meet.events.keys():
             event_record = hf.meet.events[event_key]
