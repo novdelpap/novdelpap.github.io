@@ -8,6 +8,7 @@
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <script type="py" src="./main.py" config="./pyscript.json"></script>
+    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
     <h1>Merge Tool</h1>
@@ -18,11 +19,16 @@
     </form>
     <script src="file_input.js"></script>
     <div id="files" /></div>
-    <p><label for="num_auto">Auto:</label>
-    <input type="number" required value="3" id="num_auto"></p>
-    <p><label for="num_wildcards">Wildcards:</label>
-    <input type="number" required value="7" id="num_wildcards"></p>
-    <button py-click="merge_hyfiles">Merge</button>
+    <p>
+    <label for="num_auto">Auto:</label>
+    <input type="number" required value="3" id="num_auto">
+    <label for="num_wildcards">Wildcards:</label>
+    <input type="number" required value="7" id="num_wildcards">
+    <label for="num_wildcards">Out:</label>
+    <input type="number" required value="5" id="num_out">
+    </p>
+    <button py-click="merge_hyfiles" class="button-20" role="button">Merge</button>
+
     <div id="download" /></div>
     <div id="output" /></div>
 

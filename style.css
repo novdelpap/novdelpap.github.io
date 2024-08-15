@@ -1,0 +1,20 @@
+body {
+	font-family: 'Tahoma', sans-serif;
+}
+
+input[type=number] {
+  width: 3em;
+  padding: 0.5em;
+  border: 0.2em solid #005073;
+  border-radius: 1em;
+  text-align: center;
+  color: #005073;
+  -webkit-appearance: textfield;
+     -moz-appearance: textfield;
+          appearance: textfield;
+  margin: 0;
+}
+input[type=number]::-webkit-inner-spin-button {
+  opacity: 1;
+  background: blue;
+}

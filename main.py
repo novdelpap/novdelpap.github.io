@@ -1,4 +1,5 @@
 import hytek_parser
+from hytek_parser.hy3.enums import Course
 import attrs
 from pyscript import document
 from js import Uint8Array
@@ -10,35 +11,38 @@ import hashlib
 
 VERBOSE = True
 
-def format_auto_quals(aq,pool):
+def format_auto_quals(aq,k,pool):
     vs = vf = ""
     saq = sorted(aq, key=lambda x: x.converted_seed_time)
-    vs += "\tAUTOMATIC QUALIFIERS\n"
-    for entry in saq:
+    if k > 0:
+     vs += "\tAUTOMATIC QUALIFIERS\n"
+     for entry in saq:
         for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)]:
             vf += line
-        vs += "\t(AUTO) %s, %s %s (%s) %s [%s]\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.swimmers[0].team_code, entry.converted_seed_time, entry.converted_seed_time_course)
+        vs += "\t(AUTO) %s, %s %s, %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
     return (vs, vf)
 
-def format_k_wildcards(k,wl,pool):
+def format_k_wildcards(k,out,wl,pool):
     vs = vf = ""
     fwl = filter(lambda x: type(x.converted_seed_time) == float, wl)
     swl = sorted(fwl, key=lambda x: x.converted_seed_time)
-    vs += "\t%d WILDCARDS\n" % k
-    for entry in swl[:k]:
+    if k > 0:
+     vs += "\t%d WILDCARDS\n" % k
+     for entry in swl[:k]:
         for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)]:
             vf += line
-        vs += "\t(WILDCARD) %s, %s %s, %s, [%s]\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, entry.converted_seed_time_course)
-    if VERBOSE:
-        dropped = filter(lambda x: not (type(x.converted_seed_time) == float), wl)
-        for entry in swl[k:]:
-            for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)][:-1]:
-                vf += line
-            vs += "\t(OUT) \t%s, %s %s, %s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time)
-        for entry in dropped:
-            for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)][:-1]:
-                vf += line
-            vs += "\t(OUT) \t%s, %s %s, %s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time)
+        vs += "\t(WILDCARD) %s, %s %s, %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
+    if out > 0:
+     vs += "\tfirst %d OUT\n" % out
+     dropped = filter(lambda x: not (type(x.converted_seed_time) == float), wl)
+     for entry in swl[k:k+out]:
+        for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)][:-1]:
+            vf += line
+        vs += "\t(OUT) \t%s, %s %s, %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
+        #for entry in dropped:
+        #    for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)][:-1]:
+        #        vf += line
+        #    vs += "\t(OUT) \t%s, %s %s, %s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time)
     return (vs, vf)
 
 def accumulate_entries(hyfile, accum):
@@ -97,6 +101,7 @@ def merge_hyfiles(the_arg):
 
     num_auto = int(document.getElementById('num_auto').value)
     num_wildcards = int(document.getElementById('num_wildcards').value)
+    num_out = int(document.getElementById('num_out').value)
 
     files_div = document.getElementById('files')
     output_div = document.getElementById('output')
@@ -157,13 +162,14 @@ def merge_hyfiles(the_arg):
 
     for i in range(1,81):
         if i not in d:
-            rvs += "===race %s: no racers\n" % (i)
+            pass
+            #rvs += "===race %s: no racers\n" % (i)
         else:
             rvs += "===race %s (%s-%s %s %s meters %s): \n" % (i, d[i]['age_min'], d[i]['age_max'], d[i]['event_gender'], d[i]['distance'], d[i]['stroke'])
-            (vs, vf) = format_auto_quals(d[i]['auto_qual'],entries_accum)
+            (vs, vf) = format_auto_quals(d[i]['auto_qual'],num_auto,entries_accum)
             rvs += vs
             rvf += vf
-            (vs, vf) = format_k_wildcards(num_wildcards, d[i]['wildcard_pool'],entries_accum)
+            (vs, vf) = format_k_wildcards(num_wildcards, num_out, d[i]['wildcard_pool'],entries_accum)
             rvs += vs
             rvf += vf
 
