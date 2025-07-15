@@ -112,7 +112,7 @@ def merge_hyfiles(the_arg):
     rvf = ""
 
     rvf += "A102Meet Entries             Hy-Tek, Ltd    SwimTopia     08012024 05:35 AMTanoan CC                                            10\n"
-    rvf += "B1Sundance Championships                       West Mesa Aquatic Center                     071320240713202405012024   0        74\n"
+    rvf += "B1Sundance Championships                       Albuquerque Academy                          071920250719202505012025   0        73\n"
     rvf += "B2                                                                                          010101S1  0.00                      61\n"
     entries_accum = {}
     
@@ -137,6 +137,11 @@ def merge_hyfiles(the_arg):
                 return
             z.extractall()
             file_name = z.filelist[0].filename
+            file_contents = open(file_name,encoding="windows-1252").read()
+            hy3_file = StringIO(file_contents)
+            with open(file_name, "w") as f: 
+                for line in hy3_file.readlines():
+                    f.write(line)
             
         elif file_name[-4:].lower() == '.hy3':
             hy3_file = StringIO(file_contents) 
@@ -176,6 +181,6 @@ def merge_hyfiles(the_arg):
     output_div.innerText = rvs
 
     download_div = document.getElementById('download')
-    s = base64.b64encode(rvf.encode("ascii")).decode('ascii')
+    s = base64.b64encode(rvf.encode("windows-1252")).decode('ascii')
     download_div.innerHTML = "Download <a href=\"data:application/octet-stream;base64,%s\" download=\"entry_file.hy3\">hy3 file</a>" % s
     
