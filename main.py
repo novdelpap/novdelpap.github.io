@@ -17,9 +17,11 @@ def format_auto_quals(aq,k,pool):
     if k > 0:
      vs += "\tAUTOMATIC QUALIFIERS\n"
      for entry in saq:
+        entryvf = ''
         for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)]:
             vf += line
-        vs += "\t(AUTO) %s, %s %s, %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
+            entryvf += line
+        vs += "\t(AUTO) %s, %s %s (%s), %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].nick_name if entry.swimmers[0].nick_name else entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entryvf[2:7].strip(), entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
     return (vs, vf)
 
 def format_k_wildcards(k,out,wl,pool):
@@ -29,16 +31,20 @@ def format_k_wildcards(k,out,wl,pool):
     if k > 0:
      vs += "\t%d WILDCARDS\n" % k
      for entry in swl[:k]:
+        entryvf = ''
         for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)]:
             vf += line
-        vs += "\t(WILDCARD) %s, %s %s, %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
+            entryvf += line
+        vs += "\t(WILDCARD) %s, %s %s (%s), %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].nick_name if entry.swimmers[0].nick_name else entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entryvf[2:7].strip(), entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
     if out > 0:
      vs += "\tfirst %d OUT\n" % out
      dropped = filter(lambda x: not (type(x.converted_seed_time) == float), wl)
      for entry in swl[k:k+out]:
+        entryvf = ''
         for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)][:-1]:
             vf += line
-        vs += "\t(OUT) \t%s, %s %s, %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
+            entryvf += line
+        vs += "\t(OUT) \t%s, %s %s (%s), %s%s\n" % (entry.swimmers[0].last_name, entry.swimmers[0].nick_name if entry.swimmers[0].nick_name else entry.swimmers[0].first_name, entry.swimmers[0].middle_initial, entryvf[2:7].strip(), entry.converted_seed_time, 'S' if entry.converted_seed_time_course == Course.SCM else 'Y')
         #for entry in dropped:
         #    for line in pool[entry.event_number][entry.swimmers[0].last_name][entry.swimmers[0].first_name]['%02d%02d%04d' % (entry.swimmers[0].date_of_birth.month, entry.swimmers[0].date_of_birth.day, entry.swimmers[0].date_of_birth.year)][:-1]:
         #        vf += line
