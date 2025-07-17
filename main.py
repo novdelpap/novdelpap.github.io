@@ -180,7 +180,7 @@ def merge_hyfiles(the_arg):
             (vs, vf) = format_auto_quals(d[i]['auto_qual'],num_auto,entries_accum)
             rvs += vs
             rvf += vf
-            (vs, vf) = format_k_wildcards(num_wildcards, num_out, d[i]['wildcard_pool'],entries_accum)
+            (vs, vf) = format_k_wildcards(num_wildcards + ((num_auto*files_div.children.length) - len(d[i]['auto_qual'])), num_out, d[i]['wildcard_pool'],entries_accum)
             rvs += vs
             rvf += vf
 
